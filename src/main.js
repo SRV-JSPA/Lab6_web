@@ -1,14 +1,17 @@
-const express = require('express');
+import express from 'express'
+import { getAllPosts } from './db.js'
 
 const app = express()
 const port = 3000
+app.use(express.json())
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.get('/posts', (req, res) => {
-  res.send('obteniendo todos los posts')
+app.get('/posts', async (req, res) => {
+  const posts = await getAllPosts()
+    res.json(posts)
 })
 
 app.get('/posts/:id', (req, res) => {

@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:latest
+    environment:
+      - MYSQL_DATABASE=blog_db
+      - MYSQL_USER=blog_user
+      - MYSQL_PASSWORD=blog_password
+      - MYSQL_ROOT_PASSWORD=root_password
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    ports:
+      - "3306:3306"

@@ -8,8 +8,8 @@ services:
         volumes:
             - "mysql-data:/var/lib/mysql"
         environment:
-            MYSQL_ROOT_PASSWORD: secret
-            MYSQL_DATABASE: chat
+            MYSQL_ROOT_PASSWORD: pereira
+            MYSQL_DATABASE: blog
 volumes:
     mysql-data:
         driver: "local"

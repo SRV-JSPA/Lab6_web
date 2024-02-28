@@ -32,7 +32,7 @@ app.post('/posts', async (req, res) => {
 
   const nuevoPost = await createPost(titulo, contenido, creado, carro, marca);
 
-  res.status(200).send("Información enviada con éxito: " + JSON.stringify(info));
+  res.status(200).json(info);
 
 })
 

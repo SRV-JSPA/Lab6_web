@@ -1,5 +1,5 @@
 import express from 'express'
-import { getAllPosts } from './db.js'
+import { getAllPosts, getPost } from './db.js'
 
 const app = express()
 const port = 3000
@@ -11,11 +11,13 @@ app.get('/', (req, res) => {
 
 app.get('/posts', async (req, res) => {
   const posts = await getAllPosts()
-    res.json(posts)
+  res.status(200).json(posts)
 })
 
-app.get('/posts/:id', (req, res) => {
-  res.send('obteniendo el post con el id')
+app.get('/posts/:id', async (req, res) => {
+  const postId = req.params.id;
+  const post = await getPost(postId)
+    res.status(200).json(post)
 })
 
 app.post('/posts', (req, res) => {

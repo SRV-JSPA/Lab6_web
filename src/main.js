@@ -9,14 +9,25 @@ app.use(bodyParser.json());
 
 
 app.get('/posts', async (req, res) => {
-  const posts = await getAllPosts();
-  res.status(200).json(posts);
+
+  try {
+    const posts = await getAllPosts();
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(500).json({ message: "Error al traer todos los posts" }); 
+  }
+  
 })
 
 app.get('/posts/:id', async (req, res) => {
   const postId = req.params.id;
-  const post = await getPost(postId);
+  try {
+    const post = await getPost(postId);
     res.status(200).json(post);
+  } catch (error) {
+    res.status(500).json({ message: "Error al traer el post con el id: ?" [postId] }); 
+  }
+  
 })
 
 app.post('/posts', async (req, res) => {
@@ -30,10 +41,12 @@ app.post('/posts', async (req, res) => {
   const carro = info.car;
   const marca = info.brand;
 
-  const nuevoPost = await createPost(titulo, contenido, creado, carro, marca);
-
-  res.status(200).json(info);
-
+  try {
+    const nuevoPost = await createPost(titulo, contenido, creado, carro, marca);
+    res.status(200).json(info);
+  } catch (error) {
+    res.status(500).json({ message: "Error al postear el post" }); 
+  }
 })
 
 app.put('/posts/:id', async (req, res) => {
@@ -55,8 +68,14 @@ app.put('/posts/:id', async (req, res) => {
 
 app.delete('/posts/:id', (req, res) => {
   const id = req.params.id;
-  deletePost(id);
-  res.status(204)
+
+  try {
+    deletePost(id);
+    res.status(204)
+  } catch (error) {
+    res.status(500).json({ message: "Error al eliminar el post con el id: ?" [id] }); 
+  }
+  
 })
 
 app.listen(port, () => {

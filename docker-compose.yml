@@ -1,14 +1,15 @@
-version: '3.8'
+version: "3"
 
 services:
-  db:
-    image: mysql:latest
-    environment:
-      - MYSQL_DATABASE=blog
-      - MYSQL_USER=pereira
-      - MYSQL_PASSWORD=16022004
-      - MYSQL_ROOT_PASSWORD=
-    volumes:
-      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
-    ports:
-      - "3306:3306"
+    mysql:
+        build: ./dockerfiles/mysql
+        ports:
+            - "33069:3306"
+        volumes:
+            - "mysql-data:/var/lib/mysql"
+        environment:
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_DATABASE: chat
+volumes:
+    mysql-data:
+        driver: "local"

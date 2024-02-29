@@ -6,3 +6,5 @@ CREATE TABLE IF NOT EXISTS blog_posts (
     car_name VARCHAR(255) NOT NULL,
     company VARCHAR(255) NOT NULL
 );
+
+

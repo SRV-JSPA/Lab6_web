@@ -1,1 +1,12 @@
-{"hora":"2024-02-29 06:58:13","method":"PUT","url":"/posts/7","payload":{"title":"Bugatti","content":"Uno de los mejores en el mundo","car":"Divo","brand":"Bugatti"},"response":{"title":"Bugatti","content":"Uno de los mejores en el mundo","car":"Divo","brand":"Bugatti"}}
+{"hora":"2024-02-29 06:58:13","metodo":"PUT","url":"/posts/7","payload":{"title":"Bugatti","content":"Uno de los mejores en el mundo","car":"Divo","brand":"Bugatti"},"response":{"title":"Bugatti","content":"Uno de los mejores en el mundo","car":"Divo","brand":"Bugatti"}}
+{"hora":"2024-02-29 06:59:54","metodo":"PATCH","url":"/posts","payload":{"title":"Bugatti","content":"Uno de los mejores en el mundo","car":"Divo","brand":"Bugatti"},"response":{"message":"Método HTTP no implementado"}}
+{"hora":"2024-02-29 07:04:42","metodo":"GET","url":"/hola","payload":{"title":"Bugatti","content":"Uno de los mejores en el mundo","car":"Divo","brand":"Bugatti"},"response":{"message":"Método HTTP no implementado"}}
+{"hora":"2024-02-29 07:04:49","metodo":"GET","url":"/hola","payload":{},"response":{"message":"Método HTTP no implementado"}}
+{"hora":"2024-02-29 07:06:53","metodo":"GET","url":"/posts","payload":{},"response":{"error":"Endpoint no existente"}}
+{"hora":"2024-02-29 07:07:01","metodo":"GET","url":"/posts","payload":{},"response":{"error":"Endpoint no existente"}}
+{"hora":"2024-02-29 07:08:13","metodo":"GET","url":"/posts","payload":{},"response":[{"id":1,"title":"Lambo","content":"Uno de los mejores","created_at":"2024-02-29T11:35:33.000Z","car_name":"SVJ","company":"Lambo"},{"id":2,"title":"VW","content":"Passat r line","created_at":"2024-02-28T11:55:38.000Z","car_name":"Passat","company":"VW"},{"id":4,"title":"911","content":"Uno de los mejores Porsche","created_at":null,"car_name":"911","company":"Porsche"},{"id":5,"title":"CX-90","content":"Muy bonita","created_at":null,"car_name":"CX-90","company":"Mazda"},{"id":6,"title":"CX-70","content":"Muy grande","created_at":null,"car_name":"CX-70","company":"Mazda"}]}
+{"hora":"2024-02-29 07:08:20","metodo":"GET","url":"/hola","payload":{},"response":{"error":"Endpoint no existente"}}
+{"hora":"2024-02-29 07:08:31","metodo":"PATCH","url":"/posts","payload":{},"response":{"message":"Método HTTP no implementado"}}
+{"hora":"2024-02-29 07:08:41","metodo":"GET","url":"/hola","payload":{},"response":{"error":"Endpoint no existente"}}
+{"hora":"2024-02-29 07:10:11","metodo":"POST","url":"/posts","payload":{},"response":{"error":"Formato de datos incorrecto, se espera un JSON"}}
+{"hora":"2024-02-29 07:10:37","metodo":"PATCH","url":"/posts","payload":{},"response":{"message":"Método HTTP no implementado"}}

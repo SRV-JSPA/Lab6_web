@@ -28,10 +28,23 @@ const txt = (req, res, next) => {
   next();
 };
 
+const validarEndpoint = (req, res, next) => {
+  if (!['/posts', '/posts/:id'].includes(req.path)) {
+    return res.status(400).json({ error: 'Endpoint no existente' });
+  }
+  next();
+};
+
+const validarEstructura = (req, res, next) => {
+  if (['PUT', 'POST'].includes(req.method) && !req.is('application/json')) {
+    return res.status(400).json({ error: 'Formato de datos incorrecto, se espera un JSON' });
+  }
+  next();
+};
+
 app.use(txt);
-
-
-
+app.use(validarEndpoint);
+app.use(validarEstructura);
 
 app.get('/posts', async (req, res) => {
   try {

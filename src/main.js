@@ -4,11 +4,13 @@ import bodyParser from 'body-parser'
 import fs from 'fs'
 import swaggerJsdoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
+import cors from 'cors'
 
 const app = express()
 const port = 3000
 app.use(express.json())
-app.use(bodyParser.json());
+app.use(bodyParser.json())
+app.use(cors())
 
 const options = {
   definition: {
@@ -267,6 +269,7 @@ app.post('/posts', async (req, res) => {
  */
 app.put('/posts/:id', async (req, res) => {
   const id = req.params.id;
+  const postActual = getPost(id)
   const nuevaInfo = req.body; 
   const titulo = nuevaInfo.title;
   const contenido = nuevaInfo.content;

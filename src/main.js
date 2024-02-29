@@ -58,6 +58,7 @@ const validarEstructura = (req, res, next) => {
   next();
 };
 
+app.use(validarEstructura);
 app.use('/posts-docs', swaggerUi.serve, swaggerUi.setup(confSwagger));
 app.use(txt);
 
@@ -195,17 +196,16 @@ app.get('/posts/:id', async (req, res) => {
 app.post('/posts', async (req, res) => {
   req.headers['content-type'] === 'application/json';
   const info = req.body;
-  const titulo = info.title;
-  const contenido = info.content;
+  const titulo = info.titulo;
+  const contenido = info.contenido;
   const creado = new Date().toISOString().slice(0, 19).replace('T', ' ');
-  const carro = info.car;
-  const marca = info.brand;
+  const carro = info.carro;
+  const marca = info.marca;
   try {
     const nuevoPost = await createPost(titulo, contenido, creado, carro, marca);
     res.status(200).json(info);
   } catch (error) {
     res.status(500).json({ message: "Error al postear el post" }); 
-    console.log(error)
   }
 })
 
@@ -323,7 +323,6 @@ app.delete('/posts/:id', (req, res) => {
 })
 
 app.use(validarEndpoint);
-app.use(validarEstructura);
 app.use((req, res) => {
   res.status(501).json({ message: "Método HTTP no implementado" });
 });

@@ -2,11 +2,27 @@ import express from 'express'
 import { getAllPosts, getPost, createPost, updatePost, deletePost } from './db.js'
 import bodyParser from 'body-parser'
 import fs from 'fs'
+import swaggerJsdoc from 'swagger-jsdoc'
+import swaggerUi from 'swagger-ui-express'
 
 const app = express()
 const port = 3000
 app.use(express.json())
 app.use(bodyParser.json());
+
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Blog API', 
+      version: '1.0.0', 
+      description: 'Documentación de la API del blog', 
+    },
+  },
+  apis: ['src/main.js'], 
+};
+
+const confSwagger = swaggerJsdoc(options)
 
 const txt = (req, res, next) => {
   const hora = new Date().toISOString().replace('T', ' ').slice(0, 19);
@@ -42,10 +58,37 @@ const validarEstructura = (req, res, next) => {
   next();
 };
 
+app.use('/posts-docs', swaggerUi.serve, swaggerUi.setup(confSwagger));
 app.use(txt);
-app.use(validarEndpoint);
-app.use(validarEstructura);
 
+/**
+ * @swagger
+ * /posts:
+ *   get:
+ *     tags:
+ *        - Posts
+ *     summary: Obtiene todos los posts
+ *     description: Endpoint para obtener todos los posts.
+ *     responses:
+ *       '200':
+ *         description: Respuesta exitosa
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       '500':
+ *         description: Error al traer todos los posts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 app.get('/posts', async (req, res) => {
   try {
     const posts = await getAllPosts();
@@ -55,6 +98,41 @@ app.get('/posts', async (req, res) => {
   }
 })
 
+/**
+ * @swagger
+ * /posts/{id}:
+ *   get:
+ *     tags:
+ *        - Posts
+ *     summary: Obtiene un post por su ID
+ *     description: Endpoint para obtener un post por su ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del post
+ *     responses:
+ *       '200':
+ *         description: Respuesta exitosa
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       '500':
+ *         description: Error al traer el post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 app.get('/posts/:id', async (req, res) => {
   const postId = req.params.id;
   try {
@@ -65,6 +143,55 @@ app.get('/posts/:id', async (req, res) => {
   }
 })
 
+/**
+ * @swagger
+ * /posts:
+ *   post:
+ *     tags:
+ *       - Posts
+ *     summary: Crea un nuevo post
+ *     description: Endpoint para crear un nuevo post.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               content:
+ *                 type: string
+ *               car:
+ *                 type: string
+ *               brand:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Respuesta exitosa
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 title:
+ *                   type: string
+ *                 content:
+ *                   type: string
+ *                 car:
+ *                   type: string
+ *                 brand:
+ *                   type: string
+ *       '500':
+ *         description: Error al postear el post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 app.post('/posts', async (req, res) => {
   req.headers['content-type'] === 'application/json';
   const info = req.body;
@@ -82,6 +209,62 @@ app.post('/posts', async (req, res) => {
   }
 })
 
+/**
+ * @swagger
+ * /posts/{id}:
+ *   put:
+ *     tags:
+ *       - Posts
+ *     summary: Actualiza un post por su ID
+ *     description: Endpoint para actualizar un post por su ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del post
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               content:
+ *                 type: string
+ *               car:
+ *                 type: string
+ *               brand:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Respuesta exitosa
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 title:
+ *                   type: string
+ *                 content:
+ *                   type: string
+ *                 car:
+ *                   type: string
+ *                 brand:
+ *                   type: string
+ *       '500':
+ *         description: Error al actualizar el post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 app.put('/posts/:id', async (req, res) => {
   const id = req.params.id;
   const nuevaInfo = req.body; 
@@ -99,6 +282,34 @@ app.put('/posts/:id', async (req, res) => {
   }
 })
 
+/**
+ * @swagger
+ * /posts/{id}:
+ *   delete:
+ *     tags:
+ *       - Posts
+ *     summary: Elimina un post por su ID
+ *     description: Endpoint para eliminar un post por su ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del post
+ *     responses:
+ *       '204':
+ *         description: Post eliminado exitosamente
+ *       '500':
+ *         description: Error al eliminar el post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 app.delete('/posts/:id', (req, res) => {
   const id = req.params.id;
 
@@ -111,6 +322,8 @@ app.delete('/posts/:id', (req, res) => {
   
 })
 
+app.use(validarEndpoint);
+app.use(validarEstructura);
 app.use((req, res) => {
   res.status(501).json({ message: "Método HTTP no implementado" });
 });

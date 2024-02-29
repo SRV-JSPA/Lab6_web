@@ -10,6 +10,15 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: pereira
             MYSQL_DATABASE: blog
+
+    app:
+        build: .
+        depends_on:
+            - mysql
+        links:
+            - mysql
+        ports:
+            - 3000:3000
 volumes:
     mysql-data:
         driver: "local"

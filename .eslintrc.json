@@ -1,0 +1,17 @@
+{
+    "extends": "airbnb-base",
+    "rules": {
+      "semi": "off",
+      "no-extra-semi": "error",
+      "quotes": ["error", "single"],
+      "indent": ["error", 2],
+      "camelcase": "error", 
+      "import/extensions": ["error", "ignorePackages", {"js": "never"}], 
+      "import/no-extraneous-dependencies": ["error", {"devDependencies": true}], 
+      "func-names": "off", 
+      "consistent-return": ["error", {"treatUndefinedAsUnspecified": true}], 
+      "no-unused-expressions": "off", 
+      "no-unused-vars": ["error", {"vars": "all", "args": "after-used", "ignoreRestSiblings": false}], 
+      "no-console": "off" 
+    }
+  }

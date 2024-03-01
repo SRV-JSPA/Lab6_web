@@ -1,13 +1,15 @@
 import express from 'express'
-import { getAllPosts, getPost, createPost, updatePost, deletePost } from './db.js'
 import bodyParser from 'body-parser'
 import fs from 'fs'
 import swaggerJsdoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
 import cors from 'cors'
+import {
+  getAllPosts, getPost, createPost, updatePost, deletePost,
+} from './db.js'
 
 const app = express()
-const port = 3000
+const port = 22318
 app.use(express.json())
 app.use(bodyParser.json())
 app.use(cors())
@@ -16,12 +18,12 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Blog API', 
-      version: '1.0.0', 
-      description: 'Documentación de la API del blog', 
+      title: 'Blog API',
+      version: '1.0.0',
+      description: 'Documentación de la API del blog',
     },
   },
-  apis: ['src/main.js'], 
+  apis: ['src/main.js'],
 };
 
 const confSwagger = swaggerJsdoc(options)
@@ -33,14 +35,13 @@ const txt = (req, res, next) => {
     metodo: req.method,
     url: req.url,
     payload: req.body,
-    response: null
+    response: null,
   };
 
-
-  const json = res.json;
-  res.json = function(data) {
+  const { json } = res;
+  res.json = function (data) {
     info.response = data;
-    fs.appendFileSync('log.txt', JSON.stringify(info) + '\n');
+    fs.appendFileSync('log.txt', `${JSON.stringify(info)}\n`);
     json.call(this, data);
   };
   next();
@@ -97,7 +98,7 @@ app.get('/posts', async (req, res) => {
     const posts = await getAllPosts();
     res.status(200).json(posts);
   } catch (error) {
-    res.status(500).json({ message: "Error al traer todos los posts" }); 
+    res.status(500).json({ message: 'Error al traer todos los posts' });
   }
 })
 
@@ -142,7 +143,7 @@ app.get('/posts/:id', async (req, res) => {
     const post = await getPost(postId);
     res.status(200).json(post);
   } catch (error) {
-    res.status(500).json({ message: "Error al traer el post con el id: ?" [postId] }); 
+    res.status(500).json({ message: 'Error al traer el post con el id: ?'[postId] });
   }
 })
 
@@ -198,16 +199,16 @@ app.get('/posts/:id', async (req, res) => {
 app.post('/posts', async (req, res) => {
   req.headers['content-type'] === 'application/json';
   const info = req.body;
-  const titulo = info.titulo;
-  const contenido = info.contenido;
+  const { titulo } = info;
+  const { contenido } = info;
   const creado = new Date().toISOString().slice(0, 19).replace('T', ' ');
-  const carro = info.carro;
-  const marca = info.marca;
+  const { carro } = info;
+  const { marca } = info;
   try {
     const nuevoPost = await createPost(titulo, contenido, creado, carro, marca);
     res.status(200).json(info);
   } catch (error) {
-    res.status(500).json({ message: "Error al postear el post" }); 
+    res.status(500).json({ message: 'Error al postear el post' });
   }
 })
 
@@ -268,19 +269,19 @@ app.post('/posts', async (req, res) => {
  *                   type: string
  */
 app.put('/posts/:id', async (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
   const postActual = getPost(id)
-  const nuevaInfo = req.body; 
+  const nuevaInfo = req.body;
   const titulo = nuevaInfo.title;
   const contenido = nuevaInfo.content;
   const creado = new Date().toISOString().slice(0, 19).replace('T', ' ');
   const carro = nuevaInfo.car;
   const marca = nuevaInfo.brand;
-   try {
-    const actualizacion = await updatePost(id, titulo, contenido, creado, carro, marca); 
-    res.status(200).json(nuevaInfo); 
+  try {
+    const actualizacion = await updatePost(id, titulo, contenido, creado, carro, marca);
+    res.status(200).json(nuevaInfo);
   } catch (error) {
-    res.status(500).json({ message: "Error al actualizar el post" }); 
+    res.status(500).json({ message: 'Error al actualizar el post' });
     console.log(error)
   }
 })
@@ -314,25 +315,21 @@ app.put('/posts/:id', async (req, res) => {
  *                   type: string
  */
 app.delete('/posts/:id', (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
 
   try {
     deletePost(id);
     res.status(204)
   } catch (error) {
-    res.status(500).json({ message: "Error al eliminar el post con el id: ?" [id] }); 
+    res.status(500).json({ message: 'Error al eliminar el post con el id: ?'[id] });
   }
-  
 })
 
 app.use(validarEndpoint);
 app.use((req, res) => {
-  res.status(501).json({ message: "Método HTTP no implementado" });
+  res.status(501).json({ message: 'Método HTTP no implementado' });
 });
 
-
-
 app.listen(port, () => {
-  console.log(`Server listening at http://127.0.0.1:${port}`)
+  console.log(`Server listening at http://22318.arpanetos.lol:${port}`)
 })
-

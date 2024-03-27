@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS blog_posts (
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     car_name VARCHAR(255) NOT NULL,
-    company VARCHAR(255) NOT NULL
+    company VARCHAR(255) NOT NULL,
+    imagen TEXT NOT NULL
 );
 
 

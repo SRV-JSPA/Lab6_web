@@ -204,11 +204,13 @@ app.post('/posts', async (req, res) => {
   const creado = new Date().toISOString().slice(0, 19).replace('T', ' ');
   const { carro } = info;
   const { marca } = info;
+  const {imagen} = info;
   try {
-    const nuevoPost = await createPost(titulo, contenido, creado, carro, marca);
+    const nuevoPost = await createPost(titulo, contenido, creado, carro, marca, imagen);
     res.status(200).json(info);
   } catch (error) {
     res.status(500).json({ message: 'Error al postear el post' });
+    console.log(error);
   }
 })
 

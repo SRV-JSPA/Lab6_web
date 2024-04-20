@@ -20,7 +20,7 @@ export async function deletePost(id) {
   return rows;
 }
 
-export async function createPost(title, content, created_at, car_name, company) {
-  const [result] = await conn.query('INSERT INTO blog_posts (title, content, created_at, car_name, company) VALUES (?, ?, ?, ?, ?)', [title, content, created_at, car_name, company])
+export async function createPost(title, content, created_at, car_name, company, imagen) {
+  const [result] = await conn.query('INSERT INTO blog_posts (title, content, created_at, car_name, company, imagen) VALUES (?, ?, ?, ?, ?, ?)', [title, content, created_at, car_name, company, imagen])
   return result
 }

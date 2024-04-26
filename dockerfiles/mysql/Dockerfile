@@ -4,4 +4,4 @@ COPY my.cnf /etc/mysql/conf.d/my.cnf
 
 COPY schema.sql /docker-entrypoint-initdb.d/
 
-COPY usuarios.sql /docker-entrypoint-initdb.d/
+

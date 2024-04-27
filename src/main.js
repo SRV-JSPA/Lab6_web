@@ -5,8 +5,10 @@ import swaggerJsdoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
 import cors from 'cors'
 import {
-  getAllPosts, getPost, createPost, updatePost, deletePost,
+  getAllPosts, getPost, createPost, updatePost, deletePost, createUser, getUser
 } from './db.js'
+
+import {hashpassword} from './crypto.js'
 
 const app = express()
 const port = 3000
@@ -48,7 +50,7 @@ const txt = (req, res, next) => {
 };
 
 const validarEndpoint = (req, res, next) => {
-  if (!['/posts', '/posts/:id'].includes(req.path)) {
+  if (!['/posts', '/posts/:id', '/users'].includes(req.path)) {
     return res.status(400).json({ error: 'Endpoint no existente' });
   }
   next();
@@ -326,6 +328,34 @@ app.delete('/posts/:id', (req, res) => {
     res.status(500).json({ message: 'Error al eliminar el post con el id: ?'[id] });
   }
 })
+
+app.get('/users', async (req, res) => {
+  const info = req.body
+
+  const {user} = info.user
+  const {password} = info.password
+  const userFound = await getUser(user);
+  if (userFound) {
+    console.log(userFound);
+  }
+})
+
+app.post('/users', async (req, res) => {
+  req.headers['content-type'] === 'application/json';
+  const info = req.body;
+  const {user} = info;
+  const {password} = info;
+
+  const hashedpassword = hashpassword(password);
+  
+  try {
+    await createUser(user, hashedpassword);
+    res.status(200).json(info);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al crear el usuario' });
+    console.log(error);
+  }
+}) 
 
 app.use(validarEndpoint);
 app.use((req, res) => {

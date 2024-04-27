@@ -24,3 +24,13 @@ export async function createPost(title, content, created_at, car_name, company, 
   const [result] = await conn.query('INSERT INTO blog_posts (title, content, created_at, car_name, company, imagen) VALUES (?, ?, ?, ?, ?, ?)', [title, content, created_at, car_name, company, imagen])
   return result
 }
+
+export async function createUser(user, password){
+  const [result] = await conn.query('INSERT INTO usuarios (usuario, contrasena) VALUES (?, ?)', [user, password])
+  return result
+}
+
+export async function getUser(user){
+  const [rows] = await conn.query('SELECT * FROM usuarios WHERE usuario = ?', [user]);
+  return rows;
+}

@@ -25,12 +25,12 @@ export async function createPost(title, content, created_at, car_name, company, 
   return result
 }
 
-export async function createUser(user, password){
+export async function createUser(user, password) {
   const [result] = await conn.query('INSERT INTO usuarios (usuario, contrasena) VALUES (?, ?)', [user, password])
   return result
 }
 
-export async function getUser(user){
+export async function getUser(user) {
   const [rows] = await conn.query('SELECT * FROM usuarios WHERE usuario = ?', [user]);
   return rows;
 }

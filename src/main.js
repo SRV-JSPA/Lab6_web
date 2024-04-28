@@ -5,16 +5,17 @@ import swaggerJsdoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
 import cors from 'cors'
 import {
-  getAllPosts, getPost, createPost, updatePost, deletePost, createUser, getUser
+  getAllPosts, getPost, createPost, updatePost, deletePost, createUser, getUser,
 } from './db.js'
 
-import {hashpassword} from './crypto.js'
+import { hashpassword, comparePassword } from './crypto.js'
 
 const app = express()
 const port = 3000
 app.use(express.json())
 app.use(bodyParser.json())
 app.use(cors())
+
 
 const options = {
   definition: {
@@ -50,7 +51,7 @@ const txt = (req, res, next) => {
 };
 
 const validarEndpoint = (req, res, next) => {
-  if (!['/posts', '/posts/:id', '/users'].includes(req.path)) {
+  if (!['/posts', '/posts/:id', '/users', '/user'].includes(req.path)) {
     return res.status(400).json({ error: 'Endpoint no existente' });
   }
   next();
@@ -63,9 +64,9 @@ const validarEstructura = (req, res, next) => {
   next();
 };
 
+app.use(txt);
 app.use(validarEstructura);
 app.use('/posts-docs', swaggerUi.serve, swaggerUi.setup(confSwagger));
-app.use(txt);
 
 /**
  * @swagger
@@ -206,7 +207,7 @@ app.post('/posts', async (req, res) => {
   const creado = new Date().toISOString().slice(0, 19).replace('T', ' ');
   const { carro } = info;
   const { marca } = info;
-  const {imagen} = info;
+  const { imagen } = info;
   try {
     const nuevoPost = await createPost(titulo, contenido, creado, carro, marca, imagen);
     res.status(200).json(info);
@@ -329,25 +330,32 @@ app.delete('/posts/:id', (req, res) => {
   }
 })
 
-app.get('/users', async (req, res) => {
+app.post('/user', async (req, res) => {
   const info = req.body
-
-  const {user} = info.user
-  const {password} = info.password
+  const { user } = info
+  const { password } = info
   const userFound = await getUser(user);
   if (userFound) {
-    console.log(userFound);
+    userFound.map(({ usuario, contrasena }) => {
+      if (comparePassword(password, contrasena)) {
+        res.status(200).json({ message: 'Bienvenido' });
+      } else {
+        res.status(500).json({ message: 'Contraseña incorrecta' });
+      }
+    })
+  } else {
+    res.status(500).json({ message: 'El usuario no existe' });
   }
 })
 
 app.post('/users', async (req, res) => {
   req.headers['content-type'] === 'application/json';
   const info = req.body;
-  const {user} = info;
-  const {password} = info;
+  const { user } = info;
+  const { password } = info;
 
   const hashedpassword = hashpassword(password);
-  
+
   try {
     await createUser(user, hashedpassword);
     res.status(200).json(info);
@@ -355,7 +363,7 @@ app.post('/users', async (req, res) => {
     res.status(500).json({ message: 'Error al crear el usuario' });
     console.log(error);
   }
-}) 
+})
 
 app.use(validarEndpoint);
 app.use((req, res) => {

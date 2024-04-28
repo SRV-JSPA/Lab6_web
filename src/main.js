@@ -9,6 +9,7 @@ import {
 } from './db.js'
 
 import { hashpassword, comparePassword } from './crypto.js'
+import {generateToken} from './JWT.js'
 
 const app = express()
 const port = 3000
@@ -338,7 +339,8 @@ app.post('/user', async (req, res) => {
   if (userFound) {
     userFound.map(({ usuario, contrasena }) => {
       if (comparePassword(password, contrasena)) {
-        res.status(200).json({ message: 'Bienvenido' });
+        const token = generateToken(usuario);
+        res.status(200).json({token: token});
       } else {
         res.status(500).json({ message: 'Contraseña incorrecta' });
       }

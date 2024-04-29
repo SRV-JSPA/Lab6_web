@@ -5,7 +5,7 @@ dotenv.config();
 
 const KEY = process.env.JWT_SECRET;
 
-console.log(KEY);
+
 
 export const generateToken = (user) => {
   try {
@@ -15,6 +15,19 @@ export const generateToken = (user) => {
   }
 };
 
-export const validateToken = ()  => {
-  
-}
+export const validateTokenClient = (req, res, next) => {
+  const token = req.header('Authorization').replace('Bearer ', '')
+
+  if (!token) {
+    return res.status(401).json({ message: 'Acceso denegado' });
+  }
+
+  jwt.verify(token, KEY, (err, response) => {
+    if (err) {
+      return res.status(401).json({ message: 'Acceso denegado' });
+    } else {
+      next(); 
+    }
+  });
+};
+

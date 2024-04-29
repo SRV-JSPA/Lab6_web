@@ -9,7 +9,8 @@ import {
 } from './db.js'
 
 import { hashpassword, comparePassword } from './crypto.js'
-import {generateToken} from './JWT.js'
+import {generateToken, validateTokenClient} from './JWT.js'
+
 
 const app = express()
 const port = 3000
@@ -97,7 +98,7 @@ app.use('/posts-docs', swaggerUi.serve, swaggerUi.setup(confSwagger));
  *                 message:
  *                   type: string
  */
-app.get('/posts', async (req, res) => {
+app.get('/posts', validateTokenClient, async (req, res) => {
   try {
     const posts = await getAllPosts();
     res.status(200).json(posts);
@@ -283,8 +284,9 @@ app.put('/posts/:id', async (req, res) => {
   const creado = new Date().toISOString().slice(0, 19).replace('T', ' ');
   const carro = nuevaInfo.car;
   const marca = nuevaInfo.brand;
+  const imagen = nuevaInfo.imagen
   try {
-    const actualizacion = await updatePost(id, titulo, contenido, creado, carro, marca);
+    const actualizacion = await updatePost(id, titulo, contenido, creado, carro, marca, imagen);
     res.status(200).json(nuevaInfo);
   } catch (error) {
     res.status(500).json({ message: 'Error al actualizar el post' });
@@ -371,6 +373,8 @@ app.use(validarEndpoint);
 app.use((req, res) => {
   res.status(501).json({ message: 'Método HTTP no implementado' });
 });
+
+
 
 app.listen(port, () => {
   console.log(`Server listening at http://22318.arpanetos.lol:${port}`)

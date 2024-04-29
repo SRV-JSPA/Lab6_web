@@ -10,8 +10,8 @@ export async function getPost(id) {
   return rows;
 }
 
-export async function updatePost(id, title, content, created_at, car_name, company) {
-  const [rows] = await conn.query('UPDATE blog_posts SET title = ?, content = ?, created_at = ?, car_name = ?, company = ? WHERE id = ?', [title, content, created_at, car_name, company, id]);
+export async function updatePost(id, title, content, created_at, car_name, company, imagen) {
+  const [rows] = await conn.query('UPDATE blog_posts SET title = ?, content = ?, created_at = ?, car_name = ?, company = ?, imagen = ? WHERE id = ?', [title, content, created_at, car_name, company, imagen, id]);
   return rows;
 }
 

@@ -17,6 +17,7 @@ const port = 3000
 app.use(express.json())
 app.use(bodyParser.json())
 app.use(cors())
+app.use(validateTokenClient)
 
 
 const options = {
@@ -98,7 +99,7 @@ app.use('/posts-docs', swaggerUi.serve, swaggerUi.setup(confSwagger));
  *                 message:
  *                   type: string
  */
-app.get('/posts', validateTokenClient, async (req, res) => {
+app.get('/posts', async (req, res) => {
   try {
     const posts = await getAllPosts();
     res.status(200).json(posts);

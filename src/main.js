@@ -334,6 +334,28 @@ app.delete('/posts/:id', (req, res) => {
   }
 })
 
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     tags:
+ *       - Users
+ *     summary: Obtiene un user por el username
+ *     description: Endpoint para obtener un user
+ *
+ *     responses:
+ *       '200':
+ *         description: User obtenido exitosamente
+ *       '500':
+ *         description: Error el user no existe
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 app.get('/users', async (req, res) => {
   const { user, password } = req.headers;
   const userFound = await getUser(user);
@@ -351,6 +373,29 @@ app.get('/users', async (req, res) => {
   }
 })
 
+
+/**
+ * @swagger
+ * /users:
+ *   post:
+ *     tags:
+ *       - Users
+ *     summary: Crea un user
+ *     description: Endpoint para crear un user
+ *
+ *     responses:
+ *       '200':
+ *         description: Se creo el user exitosamente
+ *       '500':
+ *         description: Error al crear el user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 app.post('/users', async (req, res) => {
   req.headers['content-type'] === 'application/json';
   const info = req.body;
@@ -359,7 +404,7 @@ app.post('/users', async (req, res) => {
 
   const userFound = await getUser(user);
 
-  if(userFound){
+  if(userFound.length > 0){
     res.status(500).json({ message: 'El usuario ya existe' });
     return;
   }

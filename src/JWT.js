@@ -17,7 +17,7 @@ export const generateToken = (user) => {
 
 export const validateTokenClient = (req, res, next) => {
 
-  if(req.path === '/users' || req.path === '/user'){
+  if(req.path === '/users'){
     next()
   } else {
     const token = req.header('Authorization').replace('Bearer ', ''); 
@@ -29,10 +29,7 @@ export const validateTokenClient = (req, res, next) => {
   jwt.verify(token, KEY, (err, response) => {
     if (err) {
       return res.status(401).json({ message: 'Acceso denegado' });
-    }
-
-    
-    if (!res.headersSent) {
+    } else {
       next();
     }
   });

@@ -334,10 +334,8 @@ app.delete('/posts/:id', (req, res) => {
   }
 })
 
-app.post('/user', async (req, res) => {
-  const info = req.body
-  const { user } = info
-  const { password } = info
+app.get('/users', async (req, res) => {
+  const { user, password } = req.headers;
   const userFound = await getUser(user);
   if (userFound) {
     userFound.map(({ usuario, contrasena }) => {
@@ -358,6 +356,13 @@ app.post('/users', async (req, res) => {
   const info = req.body;
   const { user } = info;
   const { password } = info;
+
+  const userFound = await getUser(user);
+
+  if(userFound){
+    res.status(500).json({ message: 'El usuario ya existe' });
+    return;
+  }
 
   const hashedpassword = hashpassword(password);
 
